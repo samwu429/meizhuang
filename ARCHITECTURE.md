@@ -14,4 +14,5 @@ Orders are recorded first; the storefront then shows operator-managed WeChat QR 
 
 ## Persistence
 
-Product and QR images are stored as data URLs in Postgres so free Render disks do not need to be durable.
+On GitHub Pages (no `VITE_API_BASE_URL`), products/orders/settings live in browser LocalStorage.
+With the FastAPI backend, product and QR images are stored as data URLs in Postgres so free Render disks do not need to be durable.
