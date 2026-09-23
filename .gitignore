@@ -1,0 +1,17 @@
+# Root .gitignore for local secrets, dependencies, and build artifacts.
+# 根目录忽略本地密钥、依赖与构建产物。
+.env
+backend/.env
+frontend/.env
+.deploy-secrets.txt
+.neon-claim-url.txt
+backend/.venv/
+backend/**/__pycache__/
+backend/*.db
+backend/**/*.db
+frontend/node_modules/
+frontend/dist/
+.DS_Store
+*.pyc
+.idea/
+.vscode/

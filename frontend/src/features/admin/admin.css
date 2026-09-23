@@ -1,0 +1,214 @@
+.admin-shell {
+  min-height: 100vh;
+  background: #f6f3f4;
+  color: #24181c;
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  background: #fff;
+  border-bottom: 1px solid #eadfe4;
+}
+
+.admin-header nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  align-items: center;
+}
+
+.admin-header a {
+  color: #5a4650;
+  text-decoration: none;
+}
+
+.admin-header a.active {
+  color: #b24d6a;
+  font-weight: 600;
+}
+
+.admin-header button,
+.admin-form button,
+.admin-table button {
+  font: inherit;
+  cursor: pointer;
+}
+
+.admin-header button {
+  border: 1px solid #eadfe4;
+  background: #fff;
+  padding: 0.35rem 0.7rem;
+}
+
+.admin-main,
+.admin-login {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 3rem;
+}
+
+.admin-login {
+  max-width: 420px;
+  margin-top: 4rem;
+  background: #fff;
+  border: 1px solid #eadfe4;
+  padding: 1.5rem;
+}
+
+.admin-login form,
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.admin-login label,
+.admin-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.92rem;
+}
+
+.admin-login input,
+.admin-form input,
+.admin-form textarea,
+.admin-form select,
+.admin-order-card select {
+  border: 1px solid #eadfe4;
+  padding: 0.6rem 0.7rem;
+  font: inherit;
+  background: #fff;
+}
+
+.admin-form {
+  background: #fff;
+  border: 1px solid #eadfe4;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.admin-form__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.9rem;
+}
+
+.admin-form__grid .span-2 {
+  grid-column: span 2;
+}
+
+.admin-form__check {
+  flex-direction: row !important;
+  align-items: center;
+  gap: 0.5rem !important;
+  margin-top: 1.6rem;
+}
+
+.admin-form__actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.admin-form button[type="submit"],
+.admin-login button[type="submit"] {
+  border: none;
+  background: #24181c;
+  color: #fff;
+  padding: 0.7rem 1rem;
+  width: fit-content;
+}
+
+.admin-form button.ghost {
+  border: 1px solid #eadfe4;
+  background: #fff;
+  padding: 0.7rem 1rem;
+}
+
+.admin-thumb,
+.admin-qr {
+  max-width: 180px;
+  display: block;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border: 1px solid #eadfe4;
+}
+
+.admin-table th,
+.admin-table td {
+  border-bottom: 1px solid #eadfe4;
+  padding: 0.7rem;
+  text-align: left;
+  vertical-align: top;
+  font-size: 0.92rem;
+}
+
+.admin-table__actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.admin-table button {
+  border: 1px solid #eadfe4;
+  background: #fff;
+  padding: 0.3rem 0.55rem;
+}
+
+.admin-table button.danger {
+  color: #a12d45;
+}
+
+.admin-orders {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.admin-order-card {
+  background: #fff;
+  border: 1px solid #eadfe4;
+  padding: 1rem 1.1rem;
+}
+
+.admin-order-card header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+
+.admin-order-card ul {
+  margin: 0.5rem 0 0.85rem;
+  padding-left: 1.1rem;
+}
+
+.admin-section h1 {
+  margin-top: 0;
+  font-size: 1.45rem;
+}
+
+.ok {
+  color: #2f6b45;
+}
+
+@media (max-width: 700px) {
+  .admin-form__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-form__grid .span-2 {
+    grid-column: span 1;
+  }
+
+  .admin-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

@@ -1,0 +1,40 @@
+// English storefront UI copy.
+import type { ShopMessages } from "./zh";
+
+const en: ShopMessages = {
+  shop: "Shop",
+  cart: "Cart",
+  checkout: "Checkout",
+  language: "中文",
+  heroHeadline: "Korean & Japanese beauty picks",
+  heroSub: "Place an order, then pay via WeChat QR or Interac e-Transfer.",
+  shopNow: "Shop now",
+  addToCart: "Add to cart",
+  emptyCatalog: "No products yet",
+  emptyCart: "Your cart is empty",
+  continueShopping: "Continue shopping",
+  qty: "Qty",
+  remove: "Remove",
+  subtotal: "Subtotal",
+  proceedCheckout: "Checkout",
+  name: "Full name",
+  phone: "Phone",
+  address: "Shipping address",
+  note: "Note",
+  placeOrder: "Place order",
+  submitting: "Submitting...",
+  orderSuccess: "Order placed",
+  orderId: "Order #",
+  payInstructions: "Complete payment below and include your order number in the transfer memo.",
+  wechatPay: "WeChat pay QR",
+  etransfer: "Interac e-Transfer",
+  etransferEmail: "Email",
+  amountDue: "Amount due",
+  backHome: "Back home",
+  noQr: "WeChat QR not uploaded yet",
+  noEmail: "e-Transfer email not set yet",
+  loading: "Loading...",
+  error: "Something went wrong. Please try again.",
+};
+
+export default en;
