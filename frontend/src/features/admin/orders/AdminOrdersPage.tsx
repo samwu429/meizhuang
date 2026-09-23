@@ -1,6 +1,6 @@
-// Admin order inbox with status filters and archive.
+// Admin order inbox with status filters, archive, and delete.
 import { useEffect, useMemo, useState } from "react";
-import { apiGet, apiPatch } from "../../../shared/api/client";
+import { apiDelete, apiGet, apiPatch } from "../../../shared/api/client";
 import type { Order } from "../../../shared/api/types";
 import { getAdminToken } from "../auth/token";
 import "../admin.css";
@@ -36,6 +36,7 @@ export function AdminOrdersPage() {
     try {
       const data = await apiGet<Order[]>("/api/admin/orders", token);
       setOrders(data.map((o) => ({ ...o, archived: Boolean(o.archived) })));
+      setError("");
     } catch {
       setError("\u52a0\u8f7d\u8ba2\u5355\u5931\u8d25\uff0c\u8bf7\u91cd\u65b0\u767b\u5f55");
     }
@@ -102,6 +103,19 @@ export function AdminOrdersPage() {
       await load();
     } catch {
       setError("\u5f52\u6863\u64cd\u4f5c\u5931\u8d25");
+    }
+  }
+
+  async function removeOrder(id: number) {
+    const ok = window.confirm(
+      "\u786e\u8ba4\u6c38\u4e45\u5220\u9664\u8be5\u8ba2\u5355\uff1f\u6b64\u64cd\u4f5c\u4e0d\u53ef\u6062\u590d\u3002",
+    );
+    if (!ok) return;
+    try {
+      await apiDelete(`/api/admin/orders/${id}`, token);
+      await load();
+    } catch {
+      setError("\u5220\u9664\u5931\u8d25\uff0c\u4ec5\u5df2\u5f52\u6863\u8ba2\u5355\u53ef\u5220\u9664");
     }
   }
 
@@ -199,9 +213,14 @@ export function AdminOrdersPage() {
                 </select>
               </label>
               {order.archived ? (
-                <button type="button" className="ghost" onClick={() => setArchived(order.id, false)}>
-                  {"\u53d6\u51fa\u5f52\u6863"}
-                </button>
+                <>
+                  <button type="button" className="ghost" onClick={() => setArchived(order.id, false)}>
+                    {"\u53d6\u51fa\u5f52\u6863"}
+                  </button>
+                  <button type="button" className="danger" onClick={() => removeOrder(order.id)}>
+                    {"\u5220\u9664"}
+                  </button>
+                </>
               ) : (
                 <button type="button" className="ghost" onClick={() => setArchived(order.id, true)}>
                   {"\u5f52\u6863"}

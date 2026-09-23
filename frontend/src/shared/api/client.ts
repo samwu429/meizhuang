@@ -118,6 +118,11 @@ export async function apiDelete(path: string, token?: string): Promise<void> {
       localApi.deleteProduct(Number(productMatch[1]));
       return;
     }
+    const orderMatch = path.match(/^\/api\/admin\/orders\/(\d+)$/);
+    if (orderMatch) {
+      localApi.deleteOrder(Number(orderMatch[1]));
+      return;
+    }
     throw new Error(`Unsupported local DELETE ${path}`);
   }
   return request<void>(path, {

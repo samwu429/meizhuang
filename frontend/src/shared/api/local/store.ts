@@ -242,6 +242,17 @@ export const localApi = {
     return this.updateOrder(id, { status });
   },
 
+  deleteOrder(id: number): void {
+    const orders = readJson<Order[]>(ORDERS_KEY, []);
+    const idx = orders.findIndex((o) => o.id === id);
+    if (idx < 0) throw new Error("Not found");
+    if (!Boolean(orders[idx].archived)) {
+      throw new Error("Only archived orders can be deleted");
+    }
+    orders.splice(idx, 1);
+    writeJson(ORDERS_KEY, orders);
+  },
+
   login(password: string): string {
     const expected =
       (import.meta.env.VITE_ADMIN_PASSWORD as string | undefined)?.trim() || "admin123";

@@ -1,8 +1,8 @@
-# Admin order listing, status updates, and archive toggles.
-# 管理端订单列表、状态更新与归档切换。
+# Admin order listing, status updates, archive, and delete.
+# 管理端订单列表、状态更新、归档与删除。
 import json
 
-from fastapi import APIRouter, Depends, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, Response, status
 from sqlalchemy.orm import Session
 
 from app.domain.orders.models import Order
@@ -66,3 +66,18 @@ def update_order(
     db.commit()
     db.refresh(order)
     return _order_to_read(order)
+
+
+@router.delete("/{order_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_order(order_id: int, db: Session = Depends(get_db)) -> Response:
+    order = db.query(Order).filter(Order.id == order_id).first()
+    if order is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found")
+    if not bool(getattr(order, "archived", False)):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Only archived orders can be deleted",
+        )
+    db.delete(order)
+    db.commit()
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
