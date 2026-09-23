@@ -6,6 +6,7 @@ import { AdminOrdersPage } from "./features/admin/orders/AdminOrdersPage";
 import { AdminProductsPage } from "./features/admin/products/AdminProductsPage";
 import { AdminSettingsPage } from "./features/admin/settings/AdminSettingsPage";
 import { HomePage } from "./features/catalog/HomePage";
+import { ProductDetailPage } from "./features/catalog/ProductDetailPage";
 import { CartPage } from "./features/checkout/CartPage";
 import { CheckoutPage } from "./features/checkout/CheckoutPage";
 import { OrderSuccessPage } from "./features/checkout/OrderSuccessPage";
@@ -18,6 +19,7 @@ export default function App() {
       <BrowserRouter basename={basename}>
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/product/:productId" element={<ProductDetailPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/order/:orderId" element={<OrderSuccessPage />} />

@@ -108,6 +108,10 @@ export const localApi = {
       .sort((a, b) => a.sort_order - b.sort_order || a.id - b.id);
   },
 
+  getProduct(id: number): Product | null {
+    return ensureProducts().find((p) => p.id === id) ?? null;
+  },
+
   listAdminProducts(): Product[] {
     return ensureProducts().sort((a, b) => a.sort_order - b.sort_order || a.id - b.id);
   },

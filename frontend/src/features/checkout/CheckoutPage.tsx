@@ -5,6 +5,7 @@ import { apiGet, apiPost } from "../../shared/api/client";
 import type { Order, PublicSettings } from "../../shared/api/types";
 import { formatMoney } from "../../shared/i18n";
 import { useShop } from "../../shared/shop/ShopContext";
+import { SiteFooter } from "../../shared/ui/SiteFooter";
 import { SiteHeader } from "../../shared/ui/SiteHeader";
 import "./checkout.css";
 
@@ -60,7 +61,7 @@ export function CheckoutPage() {
   return (
     <div className="page">
       <SiteHeader storeName={storeName} />
-      <main className="checkout-page">
+      <main className="page__main checkout-page">
         <h1>{t.checkout}</h1>
         <p className="muted">
           {t.subtotal}: {formatMoney(cartTotalCents, currency, locale)}
@@ -91,6 +92,7 @@ export function CheckoutPage() {
           <Link to="/cart">{t.cart}</Link>
         </p>
       </main>
+      <SiteFooter />
     </div>
   );
 }

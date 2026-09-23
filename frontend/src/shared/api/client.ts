@@ -126,4 +126,15 @@ export async function apiDelete(path: string, token?: string): Promise<void> {
   });
 }
 
+export async function fetchProduct(id: number): Promise<Product | null> {
+  if (isLocalMode()) {
+    return localApi.getProduct(id);
+  }
+  try {
+    return await request<Product>(`/api/products/${id}`);
+  } catch {
+    return null;
+  }
+}
+
 export type { AdminSettings, Order, Product, PublicSettings };

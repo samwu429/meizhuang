@@ -5,6 +5,7 @@ import { apiGet } from "../../shared/api/client";
 import type { PublicSettings } from "../../shared/api/types";
 import { formatMoney, productName } from "../../shared/i18n";
 import { useShop } from "../../shared/shop/ShopContext";
+import { SiteFooter } from "../../shared/ui/SiteFooter";
 import { SiteHeader } from "../../shared/ui/SiteHeader";
 import "./checkout.css";
 
@@ -23,7 +24,7 @@ export function CartPage() {
   return (
     <div className="page">
       <SiteHeader storeName={storeName} />
-      <main className="cart-page">
+      <main className="page__main cart-page">
         <h1>{t.cart}</h1>
         {cart.length === 0 ? (
           <div className="cart-page__empty">
@@ -36,17 +37,23 @@ export function CartPage() {
               {cart.map((item) => (
                 <li key={item.product.id}>
                   <div className="cart-page__thumb">
-                    {item.product.image_data ? (
-                      <img
-                        src={item.product.image_data}
-                        alt={productName(item.product, locale)}
-                      />
-                    ) : (
-                      <div className="cart-page__ph" />
-                    )}
+                    <Link to={`/product/${item.product.id}`}>
+                      {item.product.image_data ? (
+                        <img
+                          src={item.product.image_data}
+                          alt={productName(item.product, locale)}
+                        />
+                      ) : (
+                        <div className="cart-page__ph" />
+                      )}
+                    </Link>
                   </div>
                   <div className="cart-page__meta">
-                    <h2>{productName(item.product, locale)}</h2>
+                    <h2>
+                      <Link to={`/product/${item.product.id}`}>
+                        {productName(item.product, locale)}
+                      </Link>
+                    </h2>
                     <p>
                       {formatMoney(item.product.price_cents, item.product.currency, locale)}
                     </p>
@@ -80,6 +87,7 @@ export function CartPage() {
           </>
         )}
       </main>
+      <SiteFooter />
     </div>
   );
 }

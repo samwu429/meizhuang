@@ -1,13 +1,15 @@
-@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Noto+Sans+SC:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Shippori+Mincho:wght@500;600&display=swap");
 
 :root {
-  --bg: #faf7f8;
-  --ink: #24181c;
-  --ink-soft: #6b5962;
-  --accent: #b24d6a;
-  --line: #eadfe4;
-  --font-display: "Cormorant Garamond", "Songti SC", serif;
-  --font-body: "Noto Sans SC", "Segoe UI", sans-serif;
+  --bg: #ffffff;
+  --bg-soft: #f5f4f2;
+  --ink: #171717;
+  --ink-soft: #6a6a6a;
+  --accent: #8f3d4f;
+  --line: #e8e6e3;
+  --font-display: "Shippori Mincho", "Songti SC", serif;
+  --font-body: "IBM Plex Sans", "Noto Sans SC", sans-serif;
+  --max: 1180px;
   color: var(--ink);
   background: var(--bg);
   font-family: var(--font-body);
@@ -16,7 +18,6 @@
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 * {
@@ -31,10 +32,7 @@ body,
 }
 
 body {
-  background:
-    radial-gradient(circle at 12% 0%, rgba(178, 77, 106, 0.08), transparent 36%),
-    radial-gradient(circle at 90% 10%, rgba(216, 196, 188, 0.35), transparent 28%),
-    var(--bg);
+  background: var(--bg);
 }
 
 a {
@@ -50,6 +48,12 @@ select {
 
 .page {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page__main {
+  flex: 1;
 }
 
 .muted {
@@ -57,9 +61,44 @@ select {
 }
 
 .error {
-  color: #a12d45;
+  color: #9b2c2c;
 }
 
 img {
   max-width: 100%;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: var(--ink);
+  color: #fff;
+  padding: 0.8rem 1.25rem;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 0.92rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  transition: opacity 0.2s ease, background 0.2s ease;
+}
+
+.btn:hover {
+  opacity: 0.88;
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--line);
+}
+
+.btn--ghost:hover {
+  background: var(--bg-soft);
+  opacity: 1;
+}
+
+.btn--wide {
+  width: 100%;
 }

@@ -1,6 +1,7 @@
-// Product card for the storefront catalog grid.
+// Catalog tile: image, name, and price; opens the product detail page.
+import { Link } from "react-router-dom";
 import type { Product } from "../../shared/api/types";
-import { formatMoney, productDescription, productName } from "../../shared/i18n";
+import { formatMoney, productName } from "../../shared/i18n";
 import { useShop } from "../../shared/shop/ShopContext";
 import "./ProductCard.css";
 
@@ -9,29 +10,24 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-  const { locale, t, addToCart } = useShop();
+  const { locale } = useShop();
+  const title = productName(product, locale);
 
   return (
-    <article className="product-card">
+    <Link to={`/product/${product.id}`} className="product-card">
       <div className="product-card__media">
         {product.image_data ? (
-          <img src={product.image_data} alt={productName(product, locale)} />
+          <img src={product.image_data} alt={title} loading="lazy" />
         ) : (
           <div className="product-card__placeholder" aria-hidden />
         )}
       </div>
       <div className="product-card__body">
-        <h3>{productName(product, locale)}</h3>
-        <p>{productDescription(product, locale)}</p>
-        <div className="product-card__footer">
-          <span className="product-card__price">
-            {formatMoney(product.price_cents, product.currency, locale)}
-          </span>
-          <button type="button" onClick={() => addToCart(product)}>
-            {t.addToCart}
-          </button>
-        </div>
+        <h3>{title}</h3>
+        <p className="product-card__price">
+          {formatMoney(product.price_cents, product.currency, locale)}
+        </p>
       </div>
-    </article>
+    </Link>
   );
 }

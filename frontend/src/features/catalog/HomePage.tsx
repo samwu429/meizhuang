@@ -1,9 +1,9 @@
-// Home page: hero plus active product catalog.
+// Home page: restrained hero and product grid.
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { apiGet } from "../../shared/api/client";
 import type { Product, PublicSettings } from "../../shared/api/types";
 import { useShop } from "../../shared/shop/ShopContext";
+import { SiteFooter } from "../../shared/ui/SiteFooter";
 import { SiteHeader } from "../../shared/ui/SiteHeader";
 import { ProductCard } from "./ProductCard";
 import "./HomePage.css";
@@ -41,39 +41,44 @@ export function HomePage() {
   return (
     <div className="page">
       <SiteHeader storeName={settings?.store_name ?? ""} />
-      <section className="hero">
-        <div className="hero__veil" />
-        <div className="hero__content">
-          {settings?.store_name?.trim() ? (
-            <p className="hero__brand">{settings.store_name}</p>
-          ) : null}
-          <h1>{t.heroHeadline}</h1>
-          <p className="hero__sub">{t.heroSub}</p>
-          <a className="hero__cta" href="#catalog">
-            {t.shopNow}
-          </a>
-        </div>
-      </section>
-
-      <main id="catalog" className="catalog">
-        <div className="catalog__inner">
-          {loading ? <p className="muted">{t.loading}</p> : null}
-          {error ? <p className="error">{error}</p> : null}
-          {!loading && !error && products.length === 0 ? (
-            <p className="muted">{t.emptyCatalog}</p>
-          ) : null}
-          <div className="catalog__grid">
-            {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
+      <div className="page__main">
+        <section className="hero">
+          <div className="hero__content">
+            {settings?.store_name?.trim() ? (
+              <p className="hero__brand">{settings.store_name}</p>
+            ) : null}
+            <h1>{t.heroHeadline}</h1>
+            <p className="hero__sub">{t.heroSub}</p>
+            <a className="hero__cta" href="#catalog">
+              {t.shopNow}
+            </a>
           </div>
-          {products.length > 0 ? (
-            <div className="catalog__cart-link">
-              <Link to="/cart">{t.cart}</Link>
+        </section>
+
+        <main id="catalog" className="catalog">
+          <div className="catalog__inner">
+            <div className="catalog__head">
+              <h2>{t.allProducts}</h2>
+              {!loading && !error ? (
+                <span className="catalog__count">{products.length}</span>
+              ) : null}
             </div>
-          ) : null}
-        </div>
-      </main>
+
+            {loading ? <p className="catalog__status muted">{t.loading}</p> : null}
+            {error ? <p className="catalog__status error">{error}</p> : null}
+            {!loading && !error && products.length === 0 ? (
+              <p className="catalog__status muted">{t.emptyCatalog}</p>
+            ) : null}
+
+            <div className="catalog__grid">
+              {products.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          </div>
+        </main>
+      </div>
+      <SiteFooter />
     </div>
   );
 }

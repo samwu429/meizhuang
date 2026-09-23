@@ -5,6 +5,7 @@ import { apiGet } from "../../shared/api/client";
 import type { Order, PublicSettings } from "../../shared/api/types";
 import { formatMoney } from "../../shared/i18n";
 import { useShop } from "../../shared/shop/ShopContext";
+import { SiteFooter } from "../../shared/ui/SiteFooter";
 import { SiteHeader } from "../../shared/ui/SiteHeader";
 import "./checkout.css";
 
@@ -44,7 +45,7 @@ export function OrderSuccessPage() {
   return (
     <div className="page">
       <SiteHeader storeName={settings?.store_name ?? ""} />
-      <main className="success-page">
+      <main className="page__main success-page">
         <h1>{t.orderSuccess}</h1>
         <p>
           {t.orderId}: <strong>{order?.id ?? orderId}</strong>
@@ -84,6 +85,7 @@ export function OrderSuccessPage() {
           <Link to="/">{t.backHome}</Link>
         </p>
       </main>
+      <SiteFooter />
     </div>
   );
 }

@@ -4,10 +4,12 @@ const zh = {
   cart: "购物车",
   checkout: "结账",
   language: "EN",
-  heroHeadline: "日韩护肤与彩妆精选",
-  heroSub: "正品直达，下单后按指引完成微信或 Interac e-Transfer 付款。",
-  shopNow: "立即选购",
+  heroHeadline: "日韩护肤与彩妆",
+  heroSub: "精选在售，下单后按说明完成微信或 e-Transfer 付款。",
+  shopNow: "查看商品",
   addToCart: "加入购物车",
+  buyNow: "立即购买",
+  allProducts: "全部商品",
   emptyCatalog: "暂无在售商品",
   emptyCart: "购物车是空的",
   continueShopping: "继续选购",
@@ -29,11 +31,14 @@ const zh = {
   etransferEmail: "收款邮箱",
   amountDue: "应付金额",
   backHome: "返回首页",
+  backToShop: "返回商品列表",
+  productNotFound: "商品不存在或已下架",
   noQr: "商家尚未上传微信收款码",
   noEmail: "商家尚未设置 e-Transfer 邮箱",
   loading: "加载中...",
   error: "出错了，请稍后重试",
-};
+  footerNote: "支付方式：微信收款码 / Interac e-Transfer",
+} as const;
 
 export default zh;
-export type ShopMessages = typeof zh;
+export type ShopMessages = { [K in keyof typeof zh]: string };
