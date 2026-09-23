@@ -36,6 +36,7 @@ class OrderRead(BaseModel):
     note: str
     items: list[OrderItemRead]
     status: str
+    archived: bool = False
     locale: str
     total_cents: int
     currency: str
@@ -43,5 +44,6 @@ class OrderRead(BaseModel):
     updated_at: datetime
 
 
-class OrderStatusUpdate(BaseModel):
-    status: str = Field(pattern="^(pending|paid|shipped|cancelled)$")
+class OrderAdminUpdate(BaseModel):
+    status: str | None = Field(default=None, pattern="^(pending|paid|shipped|cancelled)$")
+    archived: bool | None = None

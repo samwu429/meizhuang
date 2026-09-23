@@ -2,7 +2,7 @@
 # 捕获收货信息与明细行的顾客订单实体。
 from datetime import datetime, timezone
 
-from sqlalchemy import DateTime, Integer, String, Text
+from sqlalchemy import Boolean, DateTime, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.infrastructure.database.base import Base
@@ -24,6 +24,9 @@ class Order(Base):
     # JSON 数组，元素为 {product_id, name_zh, name_en, qty, price_cents, currency}。
     items_json: Mapped[str] = mapped_column(Text, nullable=False)
     status: Mapped[str] = mapped_column(String(20), nullable=False, default="pending")
+    # Archived orders stay queryable but leave the active inbox.
+    # 已归档订单仍可查询，但离开进行中列表。
+    archived: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
     locale: Mapped[str] = mapped_column(String(8), nullable=False, default="zh")
     total_cents: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     currency: Mapped[str] = mapped_column(String(8), nullable=False, default="CAD")

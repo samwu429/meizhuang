@@ -28,6 +28,9 @@ from app.domain.settings import models as _settings_models  # noqa: F401
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
     Base.metadata.create_all(bind=engine)
+    from app.infrastructure.database.migrate import ensure_schema_columns
+
+    ensure_schema_columns()
     db = SessionLocal()
     try:
         ensure_store_settings(db)

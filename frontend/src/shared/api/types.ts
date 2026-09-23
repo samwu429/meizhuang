@@ -43,6 +43,7 @@ export interface Order {
   note: string;
   items: OrderItem[];
   status: string;
+  archived: boolean;
   locale: string;
   total_cents: number;
   currency: string;

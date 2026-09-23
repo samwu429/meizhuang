@@ -201,6 +201,7 @@ export const localApi = {
       note: input.note.trim(),
       items: lines,
       status: "pending",
+      archived: false,
       locale: input.locale,
       total_cents: total,
       currency,
@@ -214,16 +215,31 @@ export const localApi = {
   },
 
   listOrders(): Order[] {
-    return readJson<Order[]>(ORDERS_KEY, []);
+    return readJson<Order[]>(ORDERS_KEY, []).map((order) => ({
+      ...order,
+      archived: Boolean(order.archived),
+    }));
   },
 
-  updateOrderStatus(id: number, status: string): Order {
+  updateOrder(
+    id: number,
+    patch: { status?: string; archived?: boolean },
+  ): Order {
     const orders = readJson<Order[]>(ORDERS_KEY, []);
     const idx = orders.findIndex((o) => o.id === id);
     if (idx < 0) throw new Error("Not found");
-    orders[idx] = { ...orders[idx], status, updated_at: nowIso() };
+    orders[idx] = {
+      ...orders[idx],
+      archived: Boolean(orders[idx].archived),
+      ...patch,
+      updated_at: nowIso(),
+    };
     writeJson(ORDERS_KEY, orders);
     return orders[idx];
+  },
+
+  updateOrderStatus(id: number, status: string): Order {
+    return this.updateOrder(id, { status });
   },
 
   login(password: string): string {

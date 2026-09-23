@@ -96,9 +96,9 @@ export async function apiPatch<T>(path: string, body: unknown, token?: string): 
     requireToken(token);
     const orderMatch = path.match(/^\/api\/admin\/orders\/(\d+)$/);
     if (orderMatch) {
-      return localApi.updateOrderStatus(
+      return localApi.updateOrder(
         Number(orderMatch[1]),
-        (body as { status: string }).status,
+        body as { status?: string; archived?: boolean },
       ) as T;
     }
     throw new Error(`Unsupported local PATCH ${path}`);

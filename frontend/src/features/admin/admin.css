@@ -172,16 +172,118 @@
   gap: 1rem;
 }
 
+.admin-order-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0 0 1rem;
+}
+
+.admin-order-filters button {
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid #eadfe4;
+  background: #fff;
+  color: #5a4650;
+  padding: 0.4rem 0.7rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.admin-order-filters button span {
+  font-size: 0.78rem;
+  color: #8a7380;
+  min-width: 1.1rem;
+  text-align: center;
+}
+
+.admin-order-filters button.is-active {
+  border-color: #b24d6a;
+  color: #b24d6a;
+  background: #fff5f8;
+}
+
+.admin-order-filters button.is-active span {
+  color: #b24d6a;
+}
+
+.admin-order-search {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+  font-size: 0.92rem;
+}
+
+.admin-order-search input {
+  border: 1px solid #eadfe4;
+  padding: 0.6rem 0.7rem;
+  font: inherit;
+  background: #fff;
+  max-width: 420px;
+}
+
 .admin-order-card {
   background: #fff;
   border: 1px solid #eadfe4;
   padding: 1rem 1.1rem;
 }
 
+.admin-order-card.is-archived {
+  opacity: 0.78;
+  background: #faf8f9;
+}
+
 .admin-order-card header {
   display: flex;
   justify-content: space-between;
+  gap: 0.75rem;
   margin-bottom: 0.6rem;
+}
+
+.admin-order-card header > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.admin-order-badge {
+  font-size: 0.75rem;
+  padding: 0.15rem 0.45rem;
+  border: 1px solid #eadfe4;
+  color: #5a4650;
+  background: #faf6f8;
+}
+
+.admin-order-badge.status-pending {
+  border-color: #e0c48a;
+  color: #8a6a1f;
+  background: #fff8e8;
+}
+
+.admin-order-badge.status-paid {
+  border-color: #9fc5a8;
+  color: #2f6b45;
+  background: #eef8f1;
+}
+
+.admin-order-badge.status-shipped {
+  border-color: #9bb4d4;
+  color: #2f5278;
+  background: #eef4fb;
+}
+
+.admin-order-badge.status-cancelled {
+  border-color: #d9a0aa;
+  color: #a12d45;
+  background: #fdf0f3;
+}
+
+.admin-order-badge.is-archive-tag {
+  border-color: #cbb8c1;
+  color: #6e5864;
 }
 
 .admin-order-card ul {
@@ -189,13 +291,45 @@
   padding-left: 1.1rem;
 }
 
+.admin-order-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.75rem;
+  margin: 0.75rem 0 0.35rem;
+}
+
+.admin-order-actions label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  font-size: 0.9rem;
+}
+
+.admin-order-actions button.ghost {
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid #eadfe4;
+  background: #fff;
+  padding: 0.55rem 0.85rem;
+}
+
 .admin-section h1 {
   margin-top: 0;
   font-size: 1.45rem;
 }
 
+.muted {
+  color: #8a7380;
+  font-size: 0.9rem;
+}
+
 .ok {
   color: #2f6b45;
+}
+
+.error {
+  color: #a12d45;
 }
 
 @media (max-width: 700px) {

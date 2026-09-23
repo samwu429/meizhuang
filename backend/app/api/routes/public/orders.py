@@ -23,6 +23,7 @@ def _order_to_read(order: Order) -> OrderRead:
         note=order.note,
         items=items,
         status=order.status,
+        archived=bool(getattr(order, "archived", False)),
         locale=order.locale,
         total_cents=order.total_cents,
         currency=order.currency,
