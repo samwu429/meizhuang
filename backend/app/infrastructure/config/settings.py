@@ -25,7 +25,12 @@ class Settings(BaseSettings):
 
     # Comma-separated browser origins allowed to call the API.
     # 允许调用 API 的浏览器来源，逗号分隔。
-    cors_origins: str = "http://localhost:5173"
+    cors_origins: str = (
+        "http://localhost:5173,"
+        "https://samwu429.github.io,"
+        "https://topphi.com,"
+        "http://topphi.com"
+    )
 
 
 @lru_cache

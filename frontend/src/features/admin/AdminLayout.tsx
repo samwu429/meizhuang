@@ -18,6 +18,7 @@ export function AdminLayout() {
           <NavLink to="/admin" end>
             商品
           </NavLink>
+          <NavLink to="/admin/categories">分类</NavLink>
           <NavLink to="/admin/orders">订单</NavLink>
           <NavLink to="/admin/settings">收款设置</NavLink>
           <button

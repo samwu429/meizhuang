@@ -1,6 +1,14 @@
 // Shared TypeScript types mirroring backend API contracts.
 export type Locale = "zh" | "en";
 
+export interface Category {
+  id: number;
+  name_zh: string;
+  name_en: string;
+  sort_order: number;
+  is_active: boolean;
+}
+
 export interface Product {
   id: number;
   name_zh: string;
@@ -10,6 +18,7 @@ export interface Product {
   price_cents: number;
   currency: string;
   image_data: string | null;
+  category_id: number | null;
   is_active: boolean;
   sort_order: number;
 }

@@ -2,7 +2,7 @@
 # 前台展示与后台编辑共用的商品目录实体。
 from datetime import datetime, timezone
 
-from sqlalchemy import Boolean, DateTime, Integer, String, Text
+from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.infrastructure.database.base import Base
@@ -25,6 +25,9 @@ class Product(Base):
     # Data URL or remote URL; keeps images durable on ephemeral free hosts when stored in DB.
     # 数据 URL 或远程 URL；写入数据库后在免费无持久盘主机上仍可保留图片。
     image_data: Mapped[str | None] = mapped_column(Text, nullable=True)
+    category_id: Mapped[int | None] = mapped_column(
+        Integer, ForeignKey("categories.id", ondelete="SET NULL"), nullable=True
+    )
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
     sort_order: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=_utc_now)

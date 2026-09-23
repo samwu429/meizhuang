@@ -20,7 +20,11 @@ def _normalize_database_url(url: str) -> str:
 
 _settings = get_settings()
 _database_url = _normalize_database_url(_settings.database_url)
-_connect_args = {"check_same_thread": False} if _database_url.startswith("sqlite") else {}
+if _database_url.startswith("sqlite"):
+    _connect_args: dict = {"check_same_thread": False}
+else:
+    # PgBouncer (Neon pooler) rejects prepared statements.
+    _connect_args = {"prepare_threshold": None}
 
 engine = create_engine(
     _database_url,

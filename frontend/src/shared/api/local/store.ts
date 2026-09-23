@@ -1,6 +1,7 @@
 // LocalStorage persistence for static GitHub Pages deploys (no backend required).
 import type {
   AdminSettings,
+  Category,
   Order,
   OrderItem,
   Product,
@@ -8,6 +9,7 @@ import type {
 } from "../types";
 
 const PRODUCTS_KEY = "meizhuang_products_v1";
+const CATEGORIES_KEY = "meizhuang_categories_v1";
 const ORDERS_KEY = "meizhuang_orders_v1";
 const SETTINGS_KEY = "meizhuang_settings_v1";
 const SEQ_KEY = "meizhuang_seq_v1";
@@ -23,6 +25,7 @@ const SEED_PRODUCTS: Product[] = [
     price_cents: 4599,
     currency: "CAD",
     image_data: null,
+    category_id: 1,
     is_active: true,
     sort_order: 1,
   },
@@ -36,6 +39,7 @@ const SEED_PRODUCTS: Product[] = [
     price_cents: 2899,
     currency: "CAD",
     image_data: null,
+    category_id: 2,
     is_active: true,
     sort_order: 2,
   },
@@ -49,9 +53,16 @@ const SEED_PRODUCTS: Product[] = [
     price_cents: 2499,
     currency: "CAD",
     image_data: null,
+    category_id: 3,
     is_active: true,
     sort_order: 3,
   },
+];
+
+const SEED_CATEGORIES: Category[] = [
+  { id: 1, name_zh: "\u62a4\u80a4", name_en: "Skincare", sort_order: 1, is_active: true },
+  { id: 2, name_zh: "\u6e05\u6d01", name_en: "Cleansing", sort_order: 2, is_active: true },
+  { id: 3, name_zh: "\u5f69\u5986", name_en: "Makeup", sort_order: 3, is_active: true },
 ];
 
 function readJson<T>(key: string, fallback: T): T {
@@ -68,18 +79,32 @@ function writeJson(key: string, value: unknown): void {
   localStorage.setItem(key, JSON.stringify(value));
 }
 
-function nextId(kind: "product" | "order"): number {
-  const seq = readJson<Record<string, number>>(SEQ_KEY, { product: 3, order: 0 });
+function nextId(kind: "product" | "order" | "category"): number {
+  const seq = readJson<Record<string, number>>(SEQ_KEY, { product: 3, order: 0, category: 3 });
+  if (seq.category == null) seq.category = 3;
   seq[kind] = (seq[kind] ?? 0) + 1;
   writeJson(SEQ_KEY, seq);
   return seq[kind];
 }
 
+function withCategory(product: Product): Product {
+  return { ...product, category_id: product.category_id ?? null };
+}
+
 function ensureProducts(): Product[] {
   const existing = readJson<Product[] | null>(PRODUCTS_KEY, null);
-  if (existing && existing.length > 0) return existing;
+  if (existing && existing.length > 0) {
+    return existing.map(withCategory);
+  }
   writeJson(PRODUCTS_KEY, SEED_PRODUCTS);
   return SEED_PRODUCTS;
+}
+
+function ensureCategories(): Category[] {
+  const existing = readJson<Category[] | null>(CATEGORIES_KEY, null);
+  if (existing && existing.length > 0) return existing;
+  writeJson(CATEGORIES_KEY, SEED_CATEGORIES);
+  return SEED_CATEGORIES;
 }
 
 function ensureSettings(): AdminSettings {
@@ -102,6 +127,44 @@ function nowIso(): string {
 }
 
 export const localApi = {
+  listPublicCategories(): Category[] {
+    return ensureCategories()
+      .filter((c) => c.is_active)
+      .sort((a, b) => a.sort_order - b.sort_order || a.id - b.id);
+  },
+
+  listAdminCategories(): Category[] {
+    return ensureCategories().sort((a, b) => a.sort_order - b.sort_order || a.id - b.id);
+  },
+
+  createCategory(payload: Omit<Category, "id">): Category {
+    const categories = ensureCategories();
+    const category: Category = { ...payload, id: nextId("category") };
+    categories.push(category);
+    writeJson(CATEGORIES_KEY, categories);
+    return category;
+  },
+
+  updateCategory(id: number, patch: Partial<Category>): Category {
+    const categories = ensureCategories();
+    const idx = categories.findIndex((c) => c.id === id);
+    if (idx < 0) throw new Error("Not found");
+    categories[idx] = { ...categories[idx], ...patch, id };
+    writeJson(CATEGORIES_KEY, categories);
+    return categories[idx];
+  },
+
+  deleteCategory(id: number): void {
+    writeJson(
+      CATEGORIES_KEY,
+      ensureCategories().filter((c) => c.id !== id),
+    );
+    const products = ensureProducts().map((product) =>
+      product.category_id === id ? { ...product, category_id: null } : product,
+    );
+    writeJson(PRODUCTS_KEY, products);
+  },
+
   listPublicProducts(): Product[] {
     return ensureProducts()
       .filter((p) => p.is_active)

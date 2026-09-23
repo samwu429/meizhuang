@@ -3,6 +3,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
+from app.domain.categories.models import Category
 from app.domain.products.models import Product
 from app.domain.products.schemas import ProductCreate, ProductRead, ProductUpdate
 from app.infrastructure.auth.deps import require_admin
@@ -15,6 +16,14 @@ router = APIRouter(
 )
 
 
+def _assert_category(db: Session, category_id: int | None) -> None:
+    if category_id is None:
+        return
+    exists = db.query(Category.id).filter(Category.id == category_id).first()
+    if exists is None:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Unknown category")
+
+
 @router.get("", response_model=list[ProductRead])
 def list_all_products(db: Session = Depends(get_db)) -> list[Product]:
     return db.query(Product).order_by(Product.sort_order.asc(), Product.id.asc()).all()
@@ -22,6 +31,7 @@ def list_all_products(db: Session = Depends(get_db)) -> list[Product]:
 
 @router.post("", response_model=ProductRead, status_code=status.HTTP_201_CREATED)
 def create_product(payload: ProductCreate, db: Session = Depends(get_db)) -> Product:
+    _assert_category(db, payload.category_id)
     product = Product(**payload.model_dump())
     db.add(product)
     db.commit()
@@ -36,7 +46,10 @@ def update_product(
     product = db.query(Product).filter(Product.id == product_id).first()
     if product is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Not found")
-    for key, value in payload.model_dump(exclude_unset=True).items():
+    data = payload.model_dump(exclude_unset=True)
+    if "category_id" in data:
+        _assert_category(db, data["category_id"])
+    for key, value in data.items():
         setattr(product, key, value)
     db.commit()
     db.refresh(product)

@@ -7,9 +7,10 @@ import "./ProductCard.css";
 
 interface ProductCardProps {
   product: Product;
+  categoryLabel?: string;
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, categoryLabel }: ProductCardProps) {
   const { locale } = useShop();
   const title = productName(product, locale);
 
@@ -23,6 +24,7 @@ export function ProductCard({ product }: ProductCardProps) {
         )}
       </div>
       <div className="product-card__body">
+        {categoryLabel ? <p className="product-card__category">{categoryLabel}</p> : null}
         <h3>{title}</h3>
         <p className="product-card__price">
           {formatMoney(product.price_cents, product.currency, locale)}

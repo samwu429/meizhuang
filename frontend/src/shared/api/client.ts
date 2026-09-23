@@ -1,6 +1,6 @@
 // Fetch client with LocalStorage fallback when VITE_API_BASE_URL is empty (GitHub Pages).
 import { isLocalMode, localApi } from "./local/store";
-import type { AdminSettings, Order, Product, PublicSettings } from "./types";
+import type { AdminSettings, Category, Order, Product, PublicSettings } from "./types";
 
 const API_BASE = (import.meta.env.VITE_API_BASE_URL as string | undefined)?.replace(/\/$/, "") || "";
 
@@ -28,8 +28,15 @@ function requireToken(token?: string): void {
 
 export async function apiGet<T>(path: string, token?: string): Promise<T> {
   if (isLocalMode()) {
-    if (path === "/api/products") return localApi.listPublicProducts() as T;
+    if (path === "/api/products" || path.startsWith("/api/products?")) {
+      return localApi.listPublicProducts() as T;
+    }
+    if (path === "/api/categories") return localApi.listPublicCategories() as T;
     if (path === "/api/settings/public") return localApi.getPublicSettings() as T;
+    if (path === "/api/admin/categories") {
+      requireToken(token);
+      return localApi.listAdminCategories() as T;
+    }
     if (path === "/api/admin/products") {
       requireToken(token);
       return localApi.listAdminProducts() as T;
@@ -63,6 +70,10 @@ export async function apiPost<T>(path: string, body: unknown, token?: string): P
       requireToken(token);
       return localApi.createProduct(body as Omit<Product, "id">) as T;
     }
+    if (path === "/api/admin/categories") {
+      requireToken(token);
+      return localApi.createCategory(body as Omit<Category, "id">) as T;
+    }
     throw new Error(`Unsupported local POST ${path}`);
   }
   return request<T>(path, {
@@ -78,6 +89,10 @@ export async function apiPut<T>(path: string, body: unknown, token?: string): Pr
     const productMatch = path.match(/^\/api\/admin\/products\/(\d+)$/);
     if (productMatch) {
       return localApi.updateProduct(Number(productMatch[1]), body as Partial<Product>) as T;
+    }
+    const categoryMatch = path.match(/^\/api\/admin\/categories\/(\d+)$/);
+    if (categoryMatch) {
+      return localApi.updateCategory(Number(categoryMatch[1]), body as Partial<Category>) as T;
     }
     if (path === "/api/admin/settings") {
       return localApi.updateSettings(body as Partial<PublicSettings>) as T;
@@ -118,6 +133,11 @@ export async function apiDelete(path: string, token?: string): Promise<void> {
       localApi.deleteProduct(Number(productMatch[1]));
       return;
     }
+    const categoryMatch = path.match(/^\/api\/admin\/categories\/(\d+)$/);
+    if (categoryMatch) {
+      localApi.deleteCategory(Number(categoryMatch[1]));
+      return;
+    }
     const orderMatch = path.match(/^\/api\/admin\/orders\/(\d+)$/);
     if (orderMatch) {
       localApi.deleteOrder(Number(orderMatch[1]));
@@ -142,4 +162,4 @@ export async function fetchProduct(id: number): Promise<Product | null> {
   }
 }
 
-export type { AdminSettings, Order, Product, PublicSettings };
+export type { AdminSettings, Category, Order, Product, PublicSettings };

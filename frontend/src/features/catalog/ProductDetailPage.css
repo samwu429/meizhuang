@@ -55,6 +55,19 @@
   line-height: 1.25;
 }
 
+.detail__category {
+  display: inline-block;
+  margin: 0 0 0.65rem;
+  color: var(--ink-soft);
+  text-decoration: none;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+}
+
+.detail__category:hover {
+  color: var(--ink);
+}
+
 .detail__price {
   margin: 0.85rem 0 1.25rem;
   font-size: 1.2rem;

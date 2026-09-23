@@ -42,6 +42,7 @@ const en: ShopMessages = {
   loading: "Loading...",
   error: "Something went wrong. Please try again.",
   footerNote: "Payment: WeChat QR / Interac e-Transfer",
+  categoryAll: "All",
 };
 
 export default en;

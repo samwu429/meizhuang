@@ -1,7 +1,7 @@
 // Locale helpers for messages and bilingual product fields.
 import en from "./en";
 import zh, { type ShopMessages } from "./zh";
-import type { Locale, Product } from "../api/types";
+import type { Category, Locale, Product } from "../api/types";
 
 const dictionaries: Record<Locale, ShopMessages> = { zh, en };
 
@@ -17,6 +17,11 @@ export function productName(product: Product, locale: Locale): string {
 export function productDescription(product: Product, locale: Locale): string {
   if (locale === "en" && product.description_en.trim()) return product.description_en;
   return product.description_zh;
+}
+
+export function categoryName(category: Pick<Category, "name_zh" | "name_en">, locale: Locale): string {
+  if (locale === "en" && category.name_en.trim()) return category.name_en;
+  return category.name_zh;
 }
 
 export function formatMoney(cents: number, currency: string, locale: Locale): string {

@@ -93,6 +93,29 @@
   font-size: 0.88rem;
 }
 
+.catalog__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: -0.35rem 0 1.5rem;
+}
+
+.catalog__filters button {
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--ink);
+  padding: 0.4rem 0.8rem;
+  font-size: 0.88rem;
+}
+
+.catalog__filters button.is-active {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+
 .catalog__grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

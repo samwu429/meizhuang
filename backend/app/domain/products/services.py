@@ -1,6 +1,8 @@
 # Seeds sample beauty products when the catalog is empty.
+# 商品表为空时写入示例商品，并挂到已有分类上。
 from sqlalchemy.orm import Session
 
+from app.domain.categories.models import Category
 from app.domain.products.models import Product
 
 
@@ -12,6 +14,7 @@ SAMPLE_PRODUCTS = [
         "description_en": "Lightweight daily moisturizer for dry skin.",
         "price_cents": 4599,
         "sort_order": 1,
+        "category_zh": "\u62a4\u80a4",
     },
     {
         "name_zh": "\u6e29\u67d4\u6d01\u9762\u6ce1\u6cab",
@@ -20,6 +23,7 @@ SAMPLE_PRODUCTS = [
         "description_en": "Low-irritation foaming cleanser that leaves skin soft.",
         "price_cents": 2899,
         "sort_order": 2,
+        "category_zh": "\u6e05\u6d01",
     },
     {
         "name_zh": "\u4eae\u6cfd\u5507\u91c9",
@@ -28,6 +32,7 @@ SAMPLE_PRODUCTS = [
         "description_en": "Sheer glossy tint for everyday and evening looks.",
         "price_cents": 2499,
         "sort_order": 3,
+        "category_zh": "\u5f69\u5986",
     },
 ]
 
@@ -35,6 +40,17 @@ SAMPLE_PRODUCTS = [
 def seed_products_if_empty(db: Session) -> None:
     if db.query(Product).count() > 0:
         return
+    categories = {row.name_zh: row.id for row in db.query(Category).all()}
     for item in SAMPLE_PRODUCTS:
-        db.add(Product(**item, currency="CAD", is_active=True, image_data=None))
+        payload = dict(item)
+        category_zh = payload.pop("category_zh")
+        db.add(
+            Product(
+                **payload,
+                category_id=categories.get(category_zh),
+                currency="CAD",
+                is_active=True,
+                image_data=None,
+            )
+        )
     db.commit()

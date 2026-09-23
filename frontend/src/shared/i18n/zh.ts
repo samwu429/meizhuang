@@ -40,6 +40,7 @@ const zh = {
   loading: "加载中...",
   error: "出错了，请稍后重试",
   footerNote: "支付方式：微信收款码 / Interac e-Transfer",
+  categoryAll: "全部",
 } as const;
 
 export default zh;

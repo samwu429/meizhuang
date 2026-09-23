@@ -2,8 +2,8 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { fetchProduct, apiGet } from "../../shared/api/client";
-import type { Product, PublicSettings } from "../../shared/api/types";
-import { formatMoney, productDescription, productName } from "../../shared/i18n";
+import type { Category, Product, PublicSettings } from "../../shared/api/types";
+import { categoryName, formatMoney, productDescription, productName } from "../../shared/i18n";
 import { useShop } from "../../shared/shop/ShopContext";
 import { SiteFooter } from "../../shared/ui/SiteFooter";
 import { SiteHeader } from "../../shared/ui/SiteHeader";
@@ -14,6 +14,7 @@ export function ProductDetailPage() {
   const navigate = useNavigate();
   const { t, locale, addToCart } = useShop();
   const [product, setProduct] = useState<Product | null>(null);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [storeName, setStoreName] = useState("");
   const [qty, setQty] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -22,6 +23,9 @@ export function ProductDetailPage() {
   useEffect(() => {
     apiGet<PublicSettings>("/api/settings/public")
       .then((s) => setStoreName(s.store_name))
+      .catch(() => undefined);
+    apiGet<Category[]>("/api/categories")
+      .then(setCategories)
       .catch(() => undefined);
   }, []);
 
@@ -51,6 +55,8 @@ export function ProductDetailPage() {
       cancelled = true;
     };
   }, [productId]);
+
+  const category = categories.find((item) => item.id === product?.category_id) ?? null;
 
   function onAdd() {
     if (!product) return;
@@ -86,6 +92,11 @@ export function ProductDetailPage() {
                 )}
               </div>
               <div className="detail__info">
+                {category ? (
+                  <Link className="detail__category" to={`/?category=${category.id}`}>
+                    {categoryName(category, locale)}
+                  </Link>
+                ) : null}
                 <h1>{productName(product, locale)}</h1>
                 <p className="detail__price">
                   {formatMoney(product.price_cents, product.currency, locale)}

@@ -6,8 +6,9 @@
 - GitHub Pages: https://samwu429.github.io/meizhuang/
 - Admin: https://samwu429.github.io/meizhuang/admin/login
 
-Default Pages admin password is `admin123` (override with repo variable `VITE_ADMIN_PASSWORD`).
-Store data on Pages is stored in the browser LocalStorage until `VITE_API_BASE_URL` points at a live API.
+With `VITE_API_BASE_URL` set, the shop and admin share one Neon database through the Render API. Everyone sees the same products, categories, and orders.
+Local Pages mode (empty `VITE_API_BASE_URL`) still keeps data in that browser only. Its admin password defaults to `admin123`.
+The live admin password is the API `ADMIN_PASSWORD`, not the Pages variable.
 
 ## Stack
 
@@ -53,11 +54,9 @@ Optional repository Variables:
 
 Enable Pages: Settings → Pages → Source = GitHub Actions.
 
-## Neon / Render (optional backend)
+## Shared backend
 
-1. Create Neon DB and set `DATABASE_URL` on Render.
-2. Deploy `backend` (Docker) with `ADMIN_PASSWORD`, `ADMIN_JWT_SECRET`, `CORS_ORIGINS=https://samwu429.github.io`.
-3. Set Pages variable `VITE_API_BASE_URL` to the API URL and redeploy Pages.
+The API is a free Render web service (`render.yaml`, Docker, `backend/`). Data lives in a free Neon Postgres project. Product categories are edited in the admin and shown as filters on the storefront.
 
 ## Authorship
 

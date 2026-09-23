@@ -2,6 +2,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AdminLayout } from "./features/admin/AdminLayout";
 import { AdminLoginPage } from "./features/admin/auth/AdminLoginPage";
+import { AdminCategoriesPage } from "./features/admin/categories/AdminCategoriesPage";
 import { AdminOrdersPage } from "./features/admin/orders/AdminOrdersPage";
 import { AdminProductsPage } from "./features/admin/products/AdminProductsPage";
 import { AdminSettingsPage } from "./features/admin/settings/AdminSettingsPage";
@@ -26,6 +27,7 @@ export default function App() {
           <Route path="/admin/login" element={<AdminLoginPage />} />
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminProductsPage />} />
+            <Route path="categories" element={<AdminCategoriesPage />} />
             <Route path="orders" element={<AdminOrdersPage />} />
             <Route path="settings" element={<AdminSettingsPage />} />
           </Route>

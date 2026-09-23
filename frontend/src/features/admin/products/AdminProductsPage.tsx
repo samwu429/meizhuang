@@ -1,7 +1,7 @@
 // Admin product CRUD.
 import { useEffect, useState, type FormEvent } from "react";
 import { apiDelete, apiGet, apiPost, apiPut } from "../../../shared/api/client";
-import type { Product } from "../../../shared/api/types";
+import type { Category, Product } from "../../../shared/api/types";
 import { fileToDataUrl } from "../../../shared/utils/image";
 import { getAdminToken } from "../auth/token";
 import "../admin.css";
@@ -15,11 +15,13 @@ const emptyForm = {
   image_data: null as string | null,
   is_active: true,
   sort_order: "0",
+  category_id: "",
 };
 
 export function AdminProductsPage() {
   const token = getAdminToken() ?? "";
   const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
   const [form, setForm] = useState(emptyForm);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [error, setError] = useState("");
@@ -27,8 +29,12 @@ export function AdminProductsPage() {
 
   async function load() {
     try {
-      const data = await apiGet<Product[]>("/api/admin/products", token);
+      const [data, categoryRows] = await Promise.all([
+        apiGet<Product[]>("/api/admin/products", token),
+        apiGet<Category[]>("/api/admin/categories", token),
+      ]);
       setProducts(data);
+      setCategories(categoryRows);
     } catch {
       setError("加载商品失败，请重新登录");
     }
@@ -49,6 +55,7 @@ export function AdminProductsPage() {
       image_data: product.image_data,
       is_active: product.is_active,
       sort_order: String(product.sort_order),
+      category_id: product.category_id ? String(product.category_id) : "",
     });
     setMessage("");
   }
@@ -77,6 +84,7 @@ export function AdminProductsPage() {
       image_data: form.image_data,
       is_active: form.is_active,
       sort_order: Number(form.sort_order) || 0,
+      category_id: form.category_id ? Number(form.category_id) : null,
     };
     try {
       if (editingId == null) {
@@ -160,7 +168,22 @@ export function AdminProductsPage() {
               onChange={(e) => setForm({ ...form, description_en: e.target.value })}
             />
           </label>
-          <label>
+                    <label>
+            分类
+            <select
+              value={form.category_id}
+              onChange={(e) => setForm({ ...form, category_id: e.target.value })}
+            >
+              <option value="">未分类</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name_zh}
+                  {category.name_en ? ` / ${category.name_en}` : ""}
+                </option>
+              ))}
+            </select>
+          </label>
+<label>
             商品图片
             <input
               type="file"
@@ -201,6 +224,7 @@ export function AdminProductsPage() {
             <th>ID</th>
             <th>名称</th>
             <th>价格</th>
+            <th>分类</th>
             <th>状态</th>
             <th>操作</th>
           </tr>
@@ -214,6 +238,7 @@ export function AdminProductsPage() {
                 {p.name_en ? ` / ${p.name_en}` : ""}
               </td>
               <td>${(p.price_cents / 100).toFixed(2)}</td>
+              <td>{categories.find((c) => c.id === p.category_id)?.name_zh ?? "—"}</td>
               <td>{p.is_active ? "上架" : "下架"}</td>
               <td className="admin-table__actions">
                 <button type="button" onClick={() => startEdit(p)}>

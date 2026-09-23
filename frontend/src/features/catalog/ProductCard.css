@@ -43,6 +43,13 @@
   gap: 0.35rem;
 }
 
+.product-card__category {
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+}
+
 .product-card__body h3 {
   margin: 0;
   font-size: 0.95rem;

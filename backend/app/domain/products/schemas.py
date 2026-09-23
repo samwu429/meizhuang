@@ -13,6 +13,7 @@ class ProductBase(BaseModel):
     price_cents: int = Field(ge=0)
     currency: str = Field(default="CAD", max_length=8)
     image_data: str | None = None
+    category_id: int | None = None
     is_active: bool = True
     sort_order: int = 0
 
@@ -29,6 +30,7 @@ class ProductUpdate(BaseModel):
     price_cents: int | None = Field(default=None, ge=0)
     currency: str | None = Field(default=None, max_length=8)
     image_data: str | None = None
+    category_id: int | None = None
     is_active: bool | None = None
     sort_order: int | None = None
 

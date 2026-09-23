@@ -15,7 +15,7 @@ services:
       - key: ADMIN_JWT_SECRET
         sync: false
       - key: CORS_ORIGINS
-        sync: false
+        value: https://samwu429.github.io,https://topphi.com,http://topphi.com,http://localhost:5173
 
   - type: web
     name: meizhuang-web
