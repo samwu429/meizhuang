@@ -1,17 +1,26 @@
 // Checkout form capturing shipping details and submitting the order.
-import { useEffect, useState, type FormEvent } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState, type FormEvent } from "react";
+import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { flushSync } from "react-dom";
 import { apiGet, apiPost } from "../../shared/api/client";
-import type { Order, PublicSettings } from "../../shared/api/types";
+import type { CartItem, Order, PublicSettings } from "../../shared/api/types";
 import { formatMoney } from "../../shared/i18n";
 import { useShop } from "../../shared/shop/ShopContext";
 import { SiteFooter } from "../../shared/ui/SiteFooter";
 import { SiteHeader } from "../../shared/ui/SiteHeader";
 import "./checkout.css";
 
+interface CheckoutLocationState {
+  seedCart?: CartItem[];
+}
+
 export function CheckoutPage() {
-  const { t, locale, cart, cartTotalCents, clearCart } = useShop();
+  const { t, locale, cart, cartTotalCents, clearCart, replaceCart } = useShop();
   const navigate = useNavigate();
+  const location = useLocation();
+  const seedCart = (location.state as CheckoutLocationState | null)?.seedCart;
+  const leavingRef = useRef(false);
+  const seededRef = useRef(false);
   const [storeName, setStoreName] = useState("");
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
@@ -26,14 +35,30 @@ export function CheckoutPage() {
       .catch(() => undefined);
   }, []);
 
-  if (cart.length === 0) {
+  useEffect(() => {
+    if (seededRef.current) return;
+    if (seedCart && seedCart.length > 0) {
+      seededRef.current = true;
+      replaceCart(seedCart);
+      navigate(".", { replace: true, state: null });
+    }
+  }, [seedCart, replaceCart, navigate]);
+
+  const activeCart = cart.length > 0 ? cart : seedCart ?? [];
+
+  if (activeCart.length === 0 && !leavingRef.current) {
     return <Navigate to="/cart" replace />;
   }
 
-  const currency = cart[0].product.currency;
+  const currency = activeCart[0]?.product.currency ?? "CAD";
+  const totalCents =
+    cart.length > 0
+      ? cartTotalCents
+      : activeCart.reduce((sum, item) => sum + item.product.price_cents * item.qty, 0);
 
   async function onSubmit(event: FormEvent) {
     event.preventDefault();
+    if (activeCart.length === 0) return;
     setSubmitting(true);
     setError("");
     try {
@@ -43,15 +68,21 @@ export function CheckoutPage() {
         address,
         note,
         locale,
-        items: cart.map((item) => ({
+        items: activeCart.map((item) => ({
           product_id: item.product.id,
           qty: item.qty,
         })),
       });
-      clearCart();
       sessionStorage.setItem(`order:${order.id}`, JSON.stringify(order));
-      navigate(`/order/${order.id}`, { state: { order } });
+      // Prevent empty-cart redirect from winning the race against payment navigation.
+      // 避免清空购物车后的重定向抢在收款页跳转之前执行。
+      leavingRef.current = true;
+      flushSync(() => {
+        clearCart();
+      });
+      navigate(`/order/${order.id}`, { state: { order }, replace: true });
     } catch {
+      leavingRef.current = false;
       setError(t.error);
     } finally {
       setSubmitting(false);
@@ -64,7 +95,7 @@ export function CheckoutPage() {
       <main className="page__main checkout-page">
         <h1>{t.checkout}</h1>
         <p className="muted">
-          {t.subtotal}: {formatMoney(cartTotalCents, currency, locale)}
+          {t.subtotal}: {formatMoney(totalCents, currency, locale)}
         </p>
         <form onSubmit={onSubmit}>
           <label>

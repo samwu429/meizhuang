@@ -23,6 +23,8 @@ const zh = {
   note: "备注",
   placeOrder: "提交订单",
   submitting: "提交中...",
+  payTitle: "请完成付款",
+  payHint: "订单已提交，请用以下方式付款",
   orderSuccess: "订单已提交",
   orderId: "订单号",
   payInstructions: "请按以下方式完成付款，并在转账备注中填写订单号。",

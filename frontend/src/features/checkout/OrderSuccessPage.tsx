@@ -46,7 +46,8 @@ export function OrderSuccessPage() {
     <div className="page">
       <SiteHeader storeName={settings?.store_name ?? ""} />
       <main className="page__main success-page">
-        <h1>{t.orderSuccess}</h1>
+        <h1>{t.payTitle}</h1>
+        <p className="muted">{t.payHint}</p>
         <p>
           {t.orderId}: <strong>{order?.id ?? orderId}</strong>
         </p>

@@ -59,8 +59,9 @@ export function ProductDetailPage() {
 
   function onBuyNow() {
     if (!product) return;
-    addToCart(product, qty);
-    navigate("/checkout");
+    navigate("/checkout", {
+      state: { seedCart: [{ product, qty }] },
+    });
   }
 
   return (

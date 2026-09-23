@@ -25,6 +25,8 @@ const en: ShopMessages = {
   note: "Note",
   placeOrder: "Place order",
   submitting: "Submitting...",
+  payTitle: "Complete payment",
+  payHint: "Order placed — pay with one of the methods below",
   orderSuccess: "Order placed",
   orderId: "Order #",
   payInstructions: "Complete payment below and include your order number in the transfer memo.",

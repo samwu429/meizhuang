@@ -17,6 +17,7 @@ interface ShopContextValue {
   t: ShopMessages;
   cart: CartItem[];
   addToCart: (product: Product, qty?: number) => void;
+  replaceCart: (items: CartItem[]) => void;
   updateQty: (productId: number, qty: number) => void;
   removeFromCart: (productId: number) => void;
   clearCart: () => void;
@@ -70,6 +71,10 @@ export function ShopProvider({ children }: { children: ReactNode }) {
 
   const clearCart = useCallback(() => setCart([]), []);
 
+  const replaceCart = useCallback((items: CartItem[]) => {
+    setCart(items);
+  }, []);
+
   const value = useMemo<ShopContextValue>(() => {
     const cartCount = cart.reduce((sum, item) => sum + item.qty, 0);
     const cartTotalCents = cart.reduce(
@@ -82,13 +87,14 @@ export function ShopProvider({ children }: { children: ReactNode }) {
       t: getMessages(locale),
       cart,
       addToCart,
+      replaceCart,
       updateQty,
       removeFromCart,
       clearCart,
       cartCount,
       cartTotalCents,
     };
-  }, [locale, setLocale, cart, addToCart, updateQty, removeFromCart, clearCart]);
+  }, [locale, setLocale, cart, addToCart, replaceCart, updateQty, removeFromCart, clearCart]);
 
   return <ShopContext.Provider value={value}>{children}</ShopContext.Provider>;
 }
